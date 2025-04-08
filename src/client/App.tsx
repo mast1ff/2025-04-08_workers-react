@@ -9,7 +9,7 @@ import "./App.css";
 
 function App() {
   const [count, setCount] = useState(0);
-  const [name, setName] = useState("Unknown");
+  const [name, setName] = useState("");
 
   return (
     <>
@@ -49,12 +49,24 @@ function App() {
         </p>
       </div>
       <div className="card">
+        <div>
+          <label htmlFor="name">What's your name?</label>
+          <input
+            type="text"
+            name="name"
+            id="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
         <button
           type="button"
           onClick={() => {
-            fetch("/api/")
-              .then((res) => res.json() as Promise<{ name: string }>)
-              .then((data) => setName(data.name));
+            fetch(`/call?name=${name}`)
+              .then((res) => res.json() as Promise<{ message: string }>)
+              .then(({ message }) => {
+                alert(message);
+              });
           }}
           aria-label="get name"
         >
